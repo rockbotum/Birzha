@@ -1,0 +1,38 @@
+﻿<Page x:Class="Birzha.Pages.UserInfoPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Birzha.Pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="Профиль">
+
+    <Grid>
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+            <StackPanel Orientation="Horizontal">
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Label Content="Имя пользователя:"/>
+                    <TextBox IsEnabled="False" Name="FirstName" MaxWidth="140"/>
+                    <Label Content="Фамилия пользователя:"/>
+                    <TextBox IsEnabled="False" Name="LastName" MaxWidth="140"/>
+                    <Label Content="Отчество пользователя:"/>
+                    <TextBox IsEnabled="False" Name="Surname" MaxWidth="140"/>
+                    <Label Content="Электронная почта:"/>
+                    <TextBox IsEnabled="False" Name="Mail" MaxWidth="140"/>
+                    <Label Content="Номер телефона:"/>
+                    <TextBox IsEnabled="False" Name="Phone" MaxWidth="140"/>
+                </StackPanel>
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Column="1">
+                    <Label Content="Фото профиля" HorizontalAlignment="Center"/>
+                    <Border Margin="5" Height="175" Width="200" BorderBrush="Orange" BorderThickness="1">
+                        <Image Name="UserImage"/>
+                    </Border>
+                    <Button Content="Выбрать" Visibility="Collapsed" Click="BtnChooseImageProfile_Click" Name="BtnChooseImageProfile"/>
+                    <Button Content="Редактировать" Name="BtnChangeProfileData" Click="BtnChangeProfileData_Click"/>
+                    <Button Content="Сохранить" Visibility="Collapsed" Name="BtnSave" Click="BtnSave_Click"/>
+                </StackPanel>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Page>

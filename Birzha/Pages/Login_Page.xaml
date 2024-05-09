@@ -1,0 +1,29 @@
+﻿<Page x:Class="Birzha.Pages.Login_Page"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Birzha.Pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="Вход" Loaded="Page_Loaded">
+
+    <Grid>
+        <StackPanel Margin="10">
+            <StackPanel Margin="100">
+                <Label Content="Почта"  Width="100"/>
+                <TextBox x:Name="tbLogin" Text="gaga@gmail.com" Width="100"/>
+                <Label Content="Пароль" Width="70"/>
+                    <PasswordBox x:Name="tbPassword" Password="GAGA1234" Width="100"/>
+                <StackPanel x:Name="Captcha" Visibility="Collapsed">
+                    <TextBlock x:Name="CaptchaTxt" Style="{StaticResource Captcha}" TextDecorations="Strikethrough" HorizontalAlignment="Center"/>
+                    <TextBox x:Name="CaptchaBox" Width="100"/>
+                </StackPanel>
+                <Button Content="Обновить каптчу" Name="BtnCaptchaUpdate" Width="150" Click="BtnCaptchaUpdate_Click" Visibility="Collapsed"/>
+                <Button Content="Вход" Margin="10" Name="BtnLogin" Width="150" Click="BtnLogin_Click"/>
+                <Button Content="Регистрация" Name="BtnAuthorization" Margin="0 10" Width="150" Click="BtnAuthorization_Click"/>
+            </StackPanel>
+        </StackPanel>
+        <Frame x:Name="FrameMain" NavigationUIVisibility="Hidden" Grid.Row="1"></Frame>
+    </Grid>
+</Page>

@@ -1,0 +1,605 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Хранилище БД_фондовой_биржиModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Broker">
+          <Key>
+            <PropertyRef Name="Broker_ID" />
+          </Key>
+          <Property Name="Broker_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Registration_date" Type="date" Nullable="false" />
+          <Property Name="Place_existing" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="INN" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="License_number" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="License_actuality" Type="date" Nullable="false" />
+          <Property Name="Broker_name" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="OGRN" Type="varchar" MaxLength="13" Nullable="false" />
+          <Property Name="Adress" Type="varchar" MaxLength="250" />
+          <Property Name="Phone_number" Type="varchar" MaxLength="20" />
+          <Property Name="Status" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Company">
+          <Key>
+            <PropertyRef Name="Company_ID" />
+          </Key>
+          <Property Name="Company_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Company_name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="One_stock_cost" Type="money" />
+          <Property Name="All_stocks_quantity" Type="int" />
+          <Property Name="Company_Logo" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="Deal">
+          <Key>
+            <PropertyRef Name="Deal_ID" />
+          </Key>
+          <Property Name="Deal_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Type" Type="int" Nullable="false" />
+          <Property Name="Deal_date" Type="date" Nullable="false" />
+          <Property Name="Broker" Type="int" />
+        </EntityType>
+        <EntityType Name="Deal_type">
+          <Key>
+            <PropertyRef Name="Type_ID" />
+          </Key>
+          <Property Name="Type_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Type_name" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Stock">
+          <Key>
+            <PropertyRef Name="Stock_ID" />
+          </Key>
+          <Property Name="Stock_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Stock_cost" Type="money" />
+          <Property Name="Company" Type="int" />
+          <Property Name="Stocks_quantity_in_deal" Type="int" />
+          <Property Name="Deal" Type="int" />
+          <Property Name="Open" Type="money" />
+          <Property Name="Hight" Type="money" />
+          <Property Name="Low" Type="money" />
+          <Property Name="Close" Type="money" />
+          <Property Name="PrevDate" Type="date" />
+        </EntityType>
+        <EntityType Name="Stock_exchange">
+          <Key>
+            <PropertyRef Name="Investigation_ID" />
+          </Key>
+          <Property Name="Investigation_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Deal" Type="int" />
+          <Property Name="Person" Type="int" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="User_ID" />
+          </Key>
+          <Property Name="User_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="First_name" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="Last_name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Surname" Type="varchar" MaxLength="50" />
+          <Property Name="Password" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Mail" Type="varchar" MaxLength="255" />
+          <Property Name="Type" Type="int" Nullable="false" />
+          <Property Name="Phone_number" Type="varchar" MaxLength="20" />
+          <Property Name="Special_access" Type="bit" Nullable="false" />
+          <Property Name="Profile_logo" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="User_type">
+          <Key>
+            <PropertyRef Name="Type_ID" />
+          </Key>
+          <Property Name="Type_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Type" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <Association Name="FK_Deal_Broker">
+          <End Role="Broker" Type="Self.Broker" Multiplicity="0..1" />
+          <End Role="Deal" Type="Self.Deal" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Broker">
+              <PropertyRef Name="Broker_ID" />
+            </Principal>
+            <Dependent Role="Deal">
+              <PropertyRef Name="Broker" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Deal_Deal_type">
+          <End Role="Deal_type" Type="Self.Deal_type" Multiplicity="1" />
+          <End Role="Deal" Type="Self.Deal" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Deal_type">
+              <PropertyRef Name="Type_ID" />
+            </Principal>
+            <Dependent Role="Deal">
+              <PropertyRef Name="Type" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Stock_Company">
+          <End Role="Company" Type="Self.Company" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Stock" Type="Self.Stock" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Company">
+              <PropertyRef Name="Company_ID" />
+            </Principal>
+            <Dependent Role="Stock">
+              <PropertyRef Name="Company" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Stock_Deal1">
+          <End Role="Deal" Type="Self.Deal" Multiplicity="0..1" />
+          <End Role="Stock" Type="Self.Stock" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Deal">
+              <PropertyRef Name="Deal_ID" />
+            </Principal>
+            <Dependent Role="Stock">
+              <PropertyRef Name="Deal" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Stock_exchange_Deal">
+          <End Role="Deal" Type="Self.Deal" Multiplicity="0..1" />
+          <End Role="Stock_exchange" Type="Self.Stock_exchange" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Deal">
+              <PropertyRef Name="Deal_ID" />
+            </Principal>
+            <Dependent Role="Stock_exchange">
+              <PropertyRef Name="Deal" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Stock_exchange_User">
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="Stock_exchange" Type="Self.Stock_exchange" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="User_ID" />
+            </Principal>
+            <Dependent Role="Stock_exchange">
+              <PropertyRef Name="Person" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_User_type">
+          <End Role="User_type" Type="Self.User_type" Multiplicity="1" />
+          <End Role="User" Type="Self.User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User_type">
+              <PropertyRef Name="Type_ID" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="Type" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище БД_фондовой_биржиModelContainer">
+          <EntitySet Name="Broker" EntityType="Self.Broker" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Company" EntityType="Self.Company" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Deal" EntityType="Self.Deal" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Deal_type" EntityType="Self.Deal_type" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Stock" EntityType="Self.Stock" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Stock_exchange" EntityType="Self.Stock_exchange" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User_type" EntityType="Self.User_type" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Deal_Broker" Association="Self.FK_Deal_Broker">
+            <End Role="Broker" EntitySet="Broker" />
+            <End Role="Deal" EntitySet="Deal" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Deal_Deal_type" Association="Self.FK_Deal_Deal_type">
+            <End Role="Deal_type" EntitySet="Deal_type" />
+            <End Role="Deal" EntitySet="Deal" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Stock_Company" Association="Self.FK_Stock_Company">
+            <End Role="Company" EntitySet="Company" />
+            <End Role="Stock" EntitySet="Stock" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Stock_Deal1" Association="Self.FK_Stock_Deal1">
+            <End Role="Deal" EntitySet="Deal" />
+            <End Role="Stock" EntitySet="Stock" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Stock_exchange_Deal" Association="Self.FK_Stock_exchange_Deal">
+            <End Role="Deal" EntitySet="Deal" />
+            <End Role="Stock_exchange" EntitySet="Stock_exchange" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Stock_exchange_User" Association="Self.FK_Stock_exchange_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="Stock_exchange" EntitySet="Stock_exchange" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_User_type" Association="Self.FK_User_User_type">
+            <End Role="User_type" EntitySet="User_type" />
+            <End Role="User" EntitySet="User" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="БД_фондовой_биржиModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="БД_фондовой_биржиEntities3" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Brokers" EntityType="БД_фондовой_биржиModel.Broker" />
+          <EntitySet Name="Companies" EntityType="БД_фондовой_биржиModel.Company" />
+          <EntitySet Name="Deals" EntityType="БД_фондовой_биржиModel.Deal" />
+          <EntitySet Name="Deal_type" EntityType="БД_фондовой_биржиModel.Deal_type" />
+          <EntitySet Name="Stocks" EntityType="БД_фондовой_биржиModel.Stock" />
+          <EntitySet Name="Stock_exchange" EntityType="БД_фондовой_биржиModel.Stock_exchange" />
+          <EntitySet Name="sysdiagrams" EntityType="БД_фондовой_биржиModel.sysdiagram" />
+          <EntitySet Name="Users" EntityType="БД_фондовой_биржиModel.User" />
+          <EntitySet Name="User_type" EntityType="БД_фондовой_биржиModel.User_type" />
+          <AssociationSet Name="FK_Deal_Broker" Association="БД_фондовой_биржиModel.FK_Deal_Broker">
+            <End Role="Broker" EntitySet="Brokers" />
+            <End Role="Deal" EntitySet="Deals" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Stock_Company" Association="БД_фондовой_биржиModel.FK_Stock_Company">
+            <End Role="Company" EntitySet="Companies" />
+            <End Role="Stock" EntitySet="Stocks" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Deal_Deal_type" Association="БД_фондовой_биржиModel.FK_Deal_Deal_type">
+            <End Role="Deal_type" EntitySet="Deal_type" />
+            <End Role="Deal" EntitySet="Deals" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Stock_Deal1" Association="БД_фондовой_биржиModel.FK_Stock_Deal1">
+            <End Role="Deal" EntitySet="Deals" />
+            <End Role="Stock" EntitySet="Stocks" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Stock_exchange_Deal" Association="БД_фондовой_биржиModel.FK_Stock_exchange_Deal">
+            <End Role="Deal" EntitySet="Deals" />
+            <End Role="Stock_exchange" EntitySet="Stock_exchange" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Stock_exchange_User" Association="БД_фондовой_биржиModel.FK_Stock_exchange_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Stock_exchange" EntitySet="Stock_exchange" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_User_type" Association="БД_фондовой_биржиModel.FK_User_User_type">
+            <End Role="User_type" EntitySet="User_type" />
+            <End Role="User" EntitySet="Users" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Broker">
+          <Key>
+            <PropertyRef Name="Broker_ID" />
+          </Key>
+          <Property Name="Broker_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Registration_date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Place_existing" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="INN" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="License_number" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="License_actuality" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Broker_name" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="OGRN" Type="String" Nullable="false" MaxLength="13" FixedLength="false" Unicode="false" />
+          <Property Name="Adress" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="Phone_number" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Status" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Deals" Relationship="БД_фондовой_биржиModel.FK_Deal_Broker" FromRole="Broker" ToRole="Deal" />
+        </EntityType>
+        <EntityType Name="Company">
+          <Key>
+            <PropertyRef Name="Company_ID" />
+          </Key>
+          <Property Name="Company_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Company_name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="One_stock_cost" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="All_stocks_quantity" Type="Int32" />
+          <Property Name="Company_Logo" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <NavigationProperty Name="Stocks" Relationship="БД_фондовой_биржиModel.FK_Stock_Company" FromRole="Company" ToRole="Stock" />
+        </EntityType>
+        <EntityType Name="Deal">
+          <Key>
+            <PropertyRef Name="Deal_ID" />
+          </Key>
+          <Property Name="Deal_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Type" Type="Int32" Nullable="false" />
+          <Property Name="Deal_date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Broker" Type="Int32" />
+          <NavigationProperty Name="Broker1" Relationship="БД_фондовой_биржиModel.FK_Deal_Broker" FromRole="Deal" ToRole="Broker" />
+          <NavigationProperty Name="Deal_type" Relationship="БД_фондовой_биржиModel.FK_Deal_Deal_type" FromRole="Deal" ToRole="Deal_type" />
+          <NavigationProperty Name="Stocks" Relationship="БД_фондовой_биржиModel.FK_Stock_Deal1" FromRole="Deal" ToRole="Stock" />
+          <NavigationProperty Name="Stock_exchange" Relationship="БД_фондовой_биржиModel.FK_Stock_exchange_Deal" FromRole="Deal" ToRole="Stock_exchange" />
+        </EntityType>
+        <EntityType Name="Deal_type">
+          <Key>
+            <PropertyRef Name="Type_ID" />
+          </Key>
+          <Property Name="Type_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Type_name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Deals" Relationship="БД_фондовой_биржиModel.FK_Deal_Deal_type" FromRole="Deal_type" ToRole="Deal" />
+        </EntityType>
+        <EntityType Name="Stock">
+          <Key>
+            <PropertyRef Name="Stock_ID" />
+          </Key>
+          <Property Name="Stock_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Stock_cost" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="Company" Type="Int32" />
+          <Property Name="Stocks_quantity_in_deal" Type="Int32" />
+          <Property Name="Deal" Type="Int32" />
+          <Property Name="Open" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="Hight" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="Low" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="Close" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="PrevDate" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="Company1" Relationship="БД_фондовой_биржиModel.FK_Stock_Company" FromRole="Stock" ToRole="Company" />
+          <NavigationProperty Name="Deal1" Relationship="БД_фондовой_биржиModel.FK_Stock_Deal1" FromRole="Stock" ToRole="Deal" />
+        </EntityType>
+        <EntityType Name="Stock_exchange">
+          <Key>
+            <PropertyRef Name="Investigation_ID" />
+          </Key>
+          <Property Name="Investigation_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Deal" Type="Int32" />
+          <Property Name="Person" Type="Int32" />
+          <NavigationProperty Name="Deal1" Relationship="БД_фондовой_биржиModel.FK_Stock_exchange_Deal" FromRole="Stock_exchange" ToRole="Deal" />
+          <NavigationProperty Name="User" Relationship="БД_фондовой_биржиModel.FK_Stock_exchange_User" FromRole="Stock_exchange" ToRole="User" />
+        </EntityType>
+        <EntityType Name="sysdiagram">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="User_ID" />
+          </Key>
+          <Property Name="User_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="First_name" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Last_name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Surname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Password" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Mail" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Type" Type="Int32" Nullable="false" />
+          <Property Name="Phone_number" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Special_access" Type="Boolean" Nullable="false" />
+          <Property Name="Profile_logo" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <NavigationProperty Name="Stock_exchange" Relationship="БД_фондовой_биржиModel.FK_Stock_exchange_User" FromRole="User" ToRole="Stock_exchange" />
+          <NavigationProperty Name="User_type" Relationship="БД_фондовой_биржиModel.FK_User_User_type" FromRole="User" ToRole="User_type" />
+        </EntityType>
+        <EntityType Name="User_type">
+          <Key>
+            <PropertyRef Name="Type_ID" />
+          </Key>
+          <Property Name="Type_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Type" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Users" Relationship="БД_фондовой_биржиModel.FK_User_User_type" FromRole="User_type" ToRole="User" />
+        </EntityType>
+        <Association Name="FK_Deal_Broker">
+          <End Type="БД_фондовой_биржиModel.Broker" Role="Broker" Multiplicity="0..1" />
+          <End Type="БД_фондовой_биржиModel.Deal" Role="Deal" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Broker">
+              <PropertyRef Name="Broker_ID" />
+            </Principal>
+            <Dependent Role="Deal">
+              <PropertyRef Name="Broker" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Stock_Company">
+          <End Type="БД_фондовой_биржиModel.Company" Role="Company" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="БД_фондовой_биржиModel.Stock" Role="Stock" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Company">
+              <PropertyRef Name="Company_ID" />
+            </Principal>
+            <Dependent Role="Stock">
+              <PropertyRef Name="Company" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Deal_Deal_type">
+          <End Type="БД_фондовой_биржиModel.Deal_type" Role="Deal_type" Multiplicity="1" />
+          <End Type="БД_фондовой_биржиModel.Deal" Role="Deal" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Deal_type">
+              <PropertyRef Name="Type_ID" />
+            </Principal>
+            <Dependent Role="Deal">
+              <PropertyRef Name="Type" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Stock_Deal1">
+          <End Type="БД_фондовой_биржиModel.Deal" Role="Deal" Multiplicity="0..1" />
+          <End Type="БД_фондовой_биржиModel.Stock" Role="Stock" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Deal">
+              <PropertyRef Name="Deal_ID" />
+            </Principal>
+            <Dependent Role="Stock">
+              <PropertyRef Name="Deal" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Stock_exchange_Deal">
+          <End Type="БД_фондовой_биржиModel.Deal" Role="Deal" Multiplicity="0..1" />
+          <End Type="БД_фондовой_биржиModel.Stock_exchange" Role="Stock_exchange" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Deal">
+              <PropertyRef Name="Deal_ID" />
+            </Principal>
+            <Dependent Role="Stock_exchange">
+              <PropertyRef Name="Deal" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Stock_exchange_User">
+          <End Type="БД_фондовой_биржиModel.User" Role="User" Multiplicity="0..1" />
+          <End Type="БД_фондовой_биржиModel.Stock_exchange" Role="Stock_exchange" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="User_ID" />
+            </Principal>
+            <Dependent Role="Stock_exchange">
+              <PropertyRef Name="Person" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_User_type">
+          <End Type="БД_фондовой_биржиModel.User_type" Role="User_type" Multiplicity="1" />
+          <End Type="БД_фондовой_биржиModel.User" Role="User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User_type">
+              <PropertyRef Name="Type_ID" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="Type" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище БД_фондовой_биржиModelContainer" CdmEntityContainer="БД_фондовой_биржиEntities3">
+          <EntitySetMapping Name="Brokers">
+            <EntityTypeMapping TypeName="БД_фондовой_биржиModel.Broker">
+              <MappingFragment StoreEntitySet="Broker">
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Phone_number" ColumnName="Phone_number" />
+                <ScalarProperty Name="Adress" ColumnName="Adress" />
+                <ScalarProperty Name="OGRN" ColumnName="OGRN" />
+                <ScalarProperty Name="Broker_name" ColumnName="Broker_name" />
+                <ScalarProperty Name="License_actuality" ColumnName="License_actuality" />
+                <ScalarProperty Name="License_number" ColumnName="License_number" />
+                <ScalarProperty Name="INN" ColumnName="INN" />
+                <ScalarProperty Name="Place_existing" ColumnName="Place_existing" />
+                <ScalarProperty Name="Registration_date" ColumnName="Registration_date" />
+                <ScalarProperty Name="Broker_ID" ColumnName="Broker_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Companies">
+            <EntityTypeMapping TypeName="БД_фондовой_биржиModel.Company">
+              <MappingFragment StoreEntitySet="Company">
+                <ScalarProperty Name="Company_Logo" ColumnName="Company_Logo" />
+                <ScalarProperty Name="All_stocks_quantity" ColumnName="All_stocks_quantity" />
+                <ScalarProperty Name="One_stock_cost" ColumnName="One_stock_cost" />
+                <ScalarProperty Name="Company_name" ColumnName="Company_name" />
+                <ScalarProperty Name="Company_ID" ColumnName="Company_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Deals">
+            <EntityTypeMapping TypeName="БД_фондовой_биржиModel.Deal">
+              <MappingFragment StoreEntitySet="Deal">
+                <ScalarProperty Name="Broker" ColumnName="Broker" />
+                <ScalarProperty Name="Deal_date" ColumnName="Deal_date" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Deal_ID" ColumnName="Deal_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Deal_type">
+            <EntityTypeMapping TypeName="БД_фондовой_биржиModel.Deal_type">
+              <MappingFragment StoreEntitySet="Deal_type">
+                <ScalarProperty Name="Type_name" ColumnName="Type_name" />
+                <ScalarProperty Name="Type_ID" ColumnName="Type_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Stocks">
+            <EntityTypeMapping TypeName="БД_фондовой_биржиModel.Stock">
+              <MappingFragment StoreEntitySet="Stock">
+                <ScalarProperty Name="PrevDate" ColumnName="PrevDate" />
+                <ScalarProperty Name="Close" ColumnName="Close" />
+                <ScalarProperty Name="Low" ColumnName="Low" />
+                <ScalarProperty Name="Hight" ColumnName="Hight" />
+                <ScalarProperty Name="Open" ColumnName="Open" />
+                <ScalarProperty Name="Deal" ColumnName="Deal" />
+                <ScalarProperty Name="Stocks_quantity_in_deal" ColumnName="Stocks_quantity_in_deal" />
+                <ScalarProperty Name="Company" ColumnName="Company" />
+                <ScalarProperty Name="Stock_cost" ColumnName="Stock_cost" />
+                <ScalarProperty Name="Stock_ID" ColumnName="Stock_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Stock_exchange">
+            <EntityTypeMapping TypeName="БД_фондовой_биржиModel.Stock_exchange">
+              <MappingFragment StoreEntitySet="Stock_exchange">
+                <ScalarProperty Name="Person" ColumnName="Person" />
+                <ScalarProperty Name="Deal" ColumnName="Deal" />
+                <ScalarProperty Name="Investigation_ID" ColumnName="Investigation_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="БД_фондовой_биржиModel.sysdiagram">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="definition" ColumnName="definition" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="БД_фондовой_биржиModel.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="Profile_logo" ColumnName="Profile_logo" />
+                <ScalarProperty Name="Special_access" ColumnName="Special_access" />
+                <ScalarProperty Name="Phone_number" ColumnName="Phone_number" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Mail" ColumnName="Mail" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Surname" ColumnName="Surname" />
+                <ScalarProperty Name="Last_name" ColumnName="Last_name" />
+                <ScalarProperty Name="First_name" ColumnName="First_name" />
+                <ScalarProperty Name="User_ID" ColumnName="User_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="User_type">
+            <EntityTypeMapping TypeName="БД_фондовой_биржиModel.User_type">
+              <MappingFragment StoreEntitySet="User_type">
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Type_ID" ColumnName="Type_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
